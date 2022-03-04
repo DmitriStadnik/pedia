@@ -1,3 +1,4 @@
+import { ArticleDTO } from './../shared/dto/article.dto';
 import { Article } from './../shared/entities/Article.entity';
 import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common';
 import { ArticleService } from './article.service';
@@ -17,12 +18,12 @@ export class ArticleController {
   }
 
   @Post()
-  async create(@Body() body: any): Promise<Article> {
+  async create(@Body() body: ArticleDTO): Promise<Article> {
     return await this.articleService.create(body);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() body: any): Promise<Article> {
+  async update(@Param('id') id: string, @Body() body: ArticleDTO): Promise<Article> {
     return await this.articleService.update(id, body);
   }
 
