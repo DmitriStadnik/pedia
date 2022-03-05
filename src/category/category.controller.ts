@@ -1,4 +1,4 @@
-import { Category } from './../shared/entities/Category.entity';
+import { Category } from '../shared/entities/Category.entity';
 import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDTO } from 'src/shared/dto/category.dto';
@@ -23,7 +23,7 @@ export class CategoryController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() body: CategoryDTO): Promise<Category> {
+  async update(@Param('id') id: string, @Body() body: CategoryDTO): Promise<boolean> {
     return await this.categoryService.update(id, body);
   }
 

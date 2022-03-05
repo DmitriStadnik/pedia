@@ -1,7 +1,7 @@
+import { Category } from 'src/shared/entities/Category.entity';
 import { CategoryDTO } from './../shared/dto/category.dto';
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Category } from "src/shared/entities/Category.entity";
 import { Repository } from "typeorm";
 
 @Injectable()
@@ -19,20 +19,24 @@ export class CategoryService {
     return this.categoryRepository.findOne(id);
   }
 
-  async create({title, articles}: CategoryDTO): Promise<Category> {
+  async create({title, slug}: CategoryDTO): Promise<Category> {
     const category = new Category();
 
     category.title = title;
-    category.articles = articles;
+    category.slug = slug;
 
     return this.categoryRepository.save(category);
   }
 
-  async update(id: string, body: CategoryDTO): Promise<any> {
-    return this.categoryRepository.update(id, body);
+  async update(id: string, body: CategoryDTO): Promise<boolean> {
+    const { affected } = await this.categoryRepository.update(id, body);
+
+    return affected === 1;
   }
 
   async delete(id: string): Promise<any> {
-    return this.categoryRepository.delete(id);
+    const { affected } = await this.categoryRepository.delete(id);
+
+    return affected === 1;
   }
 }
