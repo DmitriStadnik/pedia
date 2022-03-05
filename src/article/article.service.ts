@@ -15,17 +15,11 @@ export class ArticleService {
   ) {}
 
   async getAll(): Promise<Article[]> {
-    return this.articleRepository.find({ 
-      relations: ['article', 'article.category'],
-      join: { alias: "article", leftJoinAndSelect: { category: "article.category" } }
-    });
+    return this.articleRepository.find();
   }
 
   async getById(id: string): Promise<Article> {
-    return this.articleRepository.findOne(id, { 
-      relations: ['article', 'article.category'],
-      join: { alias: "article", leftJoinAndSelect: { category: "article.category" } }
-    });
+    return this.articleRepository.findOne(id);
   }
 
   async create({
@@ -38,21 +32,29 @@ export class ArticleService {
   }: ArticleDTO): Promise<Article> {
     const article = new Article();
 
-    article.category = await this.categoryRepository.findOne(category);
+    article.category = (await this.categoryRepository.findOne(category))._id.toString();
     article.content = content;
     article.isMainArticle = !!isMainArticle;
     article.title = title;
     article.slug = slug;
-    article.linkedArticles = linkedArticles || [];
+    article.linkedArticles = linkedArticles ? linkedArticles.split(',') : [];
 
     return this.articleRepository.save(article);
   }
 
-  async update(id: string, body: ArticleDTO): Promise<any> {
-    return this.articleRepository.update(id, body);
+  async update(id: string, {category, linkedArticles, ...body}: ArticleDTO): Promise<any> {
+    const { affected } = await this.articleRepository.update(id, {
+      ...body, 
+      category: (await this.categoryRepository.findOne(category))._id.toString(), 
+      linkedArticles: linkedArticles ? linkedArticles.split(',') : []
+    });
+
+    return affected === 1;
   }
 
   async delete(id: string): Promise<any> {
-    return this.articleRepository.delete(id);
+    const { affected } = await this.articleRepository.delete(id);
+
+    return affected === 1;
   }
 }

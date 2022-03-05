@@ -7,5 +7,5 @@ export class ArticleDTO {
   content: string;
   slug: string;
   isMainArticle: boolean;
-  linkedArticles: Article[];
+  linkedArticles: string;
 }

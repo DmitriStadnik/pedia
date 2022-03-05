@@ -1,5 +1,4 @@
-import { Entity, Column, ManyToOne, ObjectID, ObjectIdColumn } from 'typeorm';
-import { Category } from './Category.entity';
+import { Entity, Column, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity({ name: 'Article' })
 export class Article {
@@ -12,8 +11,8 @@ export class Article {
   @Column()
   slug: string;
 
-  @ManyToOne(() => Category)
-  category: Category;
+  @Column()
+  category: string;
 
   @Column()
   content: string;
@@ -22,7 +21,7 @@ export class Article {
   isMainArticle: boolean;
 
   @Column()
-  linkedArticles: Article[];
+  linkedArticles: string[];
 
   @Column()
   createdAt: Date;
