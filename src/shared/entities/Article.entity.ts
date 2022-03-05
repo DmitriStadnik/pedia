@@ -1,15 +1,18 @@
+import { Entity, Column, ManyToOne, ObjectID, ObjectIdColumn } from 'typeorm';
 import { Category } from './Category.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'Article' })
 export class Article {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  _id: ObjectID;
 
   @Column()
   title: string;
 
-  @ManyToOne(type => Category, category => category.articles)
+  @Column()
+  slug: string;
+
+  @ManyToOne(() => Category)
   category: Category;
 
   @Column()

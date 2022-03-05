@@ -1,10 +1,11 @@
-import { Article } from './../entities/Article.entity';
-import { Category } from './../entities/Category.entity';
+import { Category } from '../entities/Category.entity';
+import { Article } from '../entities/Article.entity';
 
 export class ArticleDTO {
-  title?: string;
-  category?: Category;
-  content?: string;
-  isMainArticle?: boolean;
-  linkedArticles?: Article[];
+  title: string;
+  category: Category;
+  content: string;
+  slug: string;
+  isMainArticle: boolean;
+  linkedArticles: Article[];
 }

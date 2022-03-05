@@ -15,6 +15,9 @@ import { CategoryModule } from './category/category.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client', 'build'),
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
