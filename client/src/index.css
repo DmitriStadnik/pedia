@@ -2,6 +2,8 @@
 
 body {
   margin: 0;
+  height: 100%;
+  width: 100%;
   font-family: "Roboto Slab", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -10,4 +12,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+#root, html, .container {
+  height: 100%;
+  width: 100%;
 }

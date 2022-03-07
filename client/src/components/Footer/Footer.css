@@ -1,0 +1,23 @@
+.footer {
+  padding: 10px 20px;
+  max-width: 980px;
+  height: 50px;
+  margin: auto;
+}
+
+.footer__text {
+  border-top: 1px solid #0b7fab;
+  padding-top: 5px;
+}
+
+.footer__header {
+  font-size: 12px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.footer__subheader {
+  font-size: 10px;
+  margin-bottom: 0;
+  text-align: center;
+}
