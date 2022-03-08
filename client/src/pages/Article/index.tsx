@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useReducer, useState } from 'react';
+import React, { Fragment, ReactNode, useCallback, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Drawer,
@@ -11,15 +11,21 @@ import {
   Tree,
   TreeNodeInfo,
 } from '@blueprintjs/core';
-import mainPage from './mainPageData';
+import { Footer } from '../../components/Footer';
+
 import {treeReducer, NodePath} from './drawerFunctions';
+import mainPage from './mainPageData';
 
 import './Article.css';
+
+const NavLink: React.FC<{to: string, children: ReactNode}> = ({to, children}) => (
+  <Link className='drawer__link' to={to}>{children}</Link>
+);
 
 const INITIAL_STATE: TreeNodeInfo[] = [
   {
     id: 6,
-    label: (<Link className='drawer__link' to='/'>Главная</Link>),
+    label: (<NavLink to='/'>Главная</NavLink>),
     isSelected: true,
   },
   {
@@ -29,11 +35,11 @@ const INITIAL_STATE: TreeNodeInfo[] = [
     childNodes: [
       {
         id: 1,
-        label: (<Link className='drawer__link' to='/article/123'>Главная</Link>),
+        label: (<NavLink to='/article/123'>Главная</NavLink>),
       },
       {
         id: 2,
-        label: (<Link className='drawer__link' to='/article/123'>Главная</Link>),
+        label: (<NavLink to='/article/123'>Главная</NavLink>),
       },
     ],
   },
@@ -124,7 +130,7 @@ export const Article: React.FC = () => {
           />
         </div>
       </Drawer>
-      <div className="wrapper">
+      <div className="wrapper wrapper_footer">
         <div className="header">
           <Button
             className="header__button button button_nobg"
@@ -132,7 +138,7 @@ export const Article: React.FC = () => {
             icon={<Icon icon="menu" size={IconSize.LARGE} intent="primary" />}
             minimal
           />
-          <H3 className="header__text">{mainPage.title}</H3>
+          <H3 className="header__text header__text_center">{mainPage.title}</H3>
         </div>
         <div className="article">
           <H5 className="article__header">Название сегмента</H5>
@@ -155,6 +161,7 @@ export const Article: React.FC = () => {
           <p className="article__text">{mainPage.content}</p>
         </div>
       </div>
+      <Footer />
     </Fragment>
   );
 };

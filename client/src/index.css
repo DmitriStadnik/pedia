@@ -18,3 +18,34 @@ code {
   height: 100%;
   width: 100%;
 }
+
+.wrapper {
+  padding: 20px;
+  max-width: 980px;
+  margin: auto;
+}
+
+.wrapper_footer {
+  min-height: calc(100% - 50px);
+}
+
+.header {
+  border-bottom: 2px solid #0b7fab;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.header__text {
+  margin-bottom: 5px;
+  letter-spacing: 0.00938em;
+  font-weight: 500;
+}
+
+.header__text_center {
+  text-align: center;
+}
+
+.table {
+  display: flex;
+  justify-content: center;
+}

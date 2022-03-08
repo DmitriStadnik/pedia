@@ -1,0 +1,11 @@
+.header {
+  border-bottom: 2px solid #0b7fab;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.header__text {
+  margin-bottom: 5px;
+  letter-spacing: 0.00938em;
+  font-weight: 500;
+}
