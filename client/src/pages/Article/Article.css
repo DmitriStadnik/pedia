@@ -27,6 +27,27 @@
   font-weight: 500;
 }
 
+.drawer__tree .bp3-tree-node-label {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.bp3-tree-node-selected .drawer__link {
+  color: white;
+}
+
+.drawer__link {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.drawer__link:hover {
+  text-decoration: none;
+}
+
 .header {
   border-bottom: 2px solid #0b7fab;
   margin-bottom: 20px;
