@@ -1,0 +1,22 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__header {
+  text-align: center;
+}
+
+.login__card {
+  max-width: 500px;
+  min-width: 300px; 
+  flex: 1;
+}
+
+.button_login  {
+  margin: 10px auto;
+  display: block;
+  min-width: 80px;
+  text-align: center;
+}
