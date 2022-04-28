@@ -3,47 +3,58 @@ import React, { Fragment, useCallback, useState } from 'react';
 
 import './Login.css';
 
-const LockButton: React.FC<{
-  showPassword: boolean, 
-  handleLockClick: () => void
-}> = ({showPassword, handleLockClick}) => (
+interface LockButtonProps {
+  showPassword: boolean;
+  handleLockClick: () => void;
+}
+
+interface LoginProps {
+  handleLogin: (password: string) => void;
+}
+
+const LockButton: React.FC<LockButtonProps> = ({
+  showPassword,
+  handleLockClick,
+}) => (
   <Button
-    icon={showPassword ? "unlock" : "lock"}
+    icon={showPassword ? 'unlock' : 'lock'}
     intent={Intent.WARNING}
     minimal={true}
     onClick={handleLockClick}
   />
 );
 
-export const Login: React.FC<{handleLogin: (password: string) => void}> = ({handleLogin}) => {
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [password, setPassword] = useState<string>('')
+export const Login: React.FC<LoginProps> = ({ handleLogin }) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>('');
 
   const handleLockClick = () => {
     setShowPassword(!showPassword);
-  }
+  };
 
   const handleButtonClick = useCallback(() => {
-    handleLogin(password)
+    handleLogin(password);
   }, [password]);
 
   return (
     <Fragment>
       <div className="login">
-        <Card className='login__card'>
-          <H5 className='login__header'>Enter password</H5>
+        <Card className="login__card">
+          <H5 className="login__header">Enter password</H5>
           <InputGroup
             large
             placeholder=""
-            rightElement={<LockButton 
-              showPassword={showPassword} 
-              handleLockClick={handleLockClick} 
-            />}
-            type={showPassword ? "text" : "password"}
+            rightElement={
+              <LockButton
+                showPassword={showPassword}
+                handleLockClick={handleLockClick}
+              />
+            }
+            type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <Button className='button button_login' onClick={handleButtonClick}>
+          <Button className="button button_login" onClick={handleButtonClick}>
             Enter
           </Button>
         </Card>

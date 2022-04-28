@@ -9,6 +9,8 @@ async function bootstrap() {
     exclude: ['public'],
   });
 
+  app.enableCors();
+
   await app.listen(3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

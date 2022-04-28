@@ -26,7 +26,7 @@ const articles = [
     dateCreated: '2022-02-19',
     dateUpdated: '2022-02-07',
   },
-]
+];
 
 export const ArticlesTable: React.FC = () => {
   return (
@@ -46,11 +46,11 @@ export const ArticlesTable: React.FC = () => {
           </thead>
           <tbody>
             {articles.map((article, index) => (
-              <tr 
+              <tr
                 onClick={() => console.log(`clicked article ${article.title}`)}
                 key={article.slug}
               >
-                <td>{index +1}</td>
+                <td>{index + 1}</td>
                 <td>{article.title}</td>
                 <td>{article.slug}</td>
                 <td>{article.category}</td>
@@ -59,7 +59,6 @@ export const ArticlesTable: React.FC = () => {
                 <td>{article.dateUpdated}</td>
               </tr>
             ))}
-            
           </tbody>
         </HTMLTable>
       </div>

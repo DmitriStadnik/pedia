@@ -1,6 +1,6 @@
 import { ArticleDTO } from './../shared/dto/article.dto';
 import { Article } from './../shared/entities/Article.entity';
-import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Delete, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { ArticleService } from './article.service';
 
 @Controller('/article/')
@@ -10,6 +10,11 @@ export class ArticleController {
   @Get()
   async getAll(): Promise<Article[]> {
     return await this.articleService.getAll();
+  }
+
+  @Get('test-error')
+  async test(): Promise<any> {
+    throw new HttpException('Test', HttpStatus.INTERNAL_SERVER_ERROR);;
   }
 
   @Get(':id')

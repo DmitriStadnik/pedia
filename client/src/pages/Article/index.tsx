@@ -1,4 +1,10 @@
-import React, { Fragment, ReactNode, useCallback, useReducer, useState } from 'react';
+import React, {
+  Fragment,
+  ReactNode,
+  useCallback,
+  useReducer,
+  useState,
+} from 'react';
 import { Link } from 'react-router-dom';
 import {
   Drawer,
@@ -13,19 +19,24 @@ import {
 } from '@blueprintjs/core';
 import { Footer } from '../../components/Footer';
 
-import {treeReducer, NodePath} from './drawerFunctions';
+import { treeReducer, NodePath } from './drawerFunctions';
 import mainPage from './mainPageData';
 
 import './Article.css';
 
-const NavLink: React.FC<{to: string, children: ReactNode}> = ({to, children}) => (
-  <Link className='drawer__link' to={to}>{children}</Link>
+const NavLink: React.FC<{ to: string; children: ReactNode }> = ({
+  to,
+  children,
+}) => (
+  <Link className="drawer__link" to={to}>
+    {children}
+  </Link>
 );
 
 const INITIAL_STATE: TreeNodeInfo[] = [
   {
     id: 6,
-    label: (<NavLink to='/'>Главная</NavLink>),
+    label: <NavLink to="/">Главная</NavLink>,
     isSelected: true,
   },
   {
@@ -35,11 +46,11 @@ const INITIAL_STATE: TreeNodeInfo[] = [
     childNodes: [
       {
         id: 1,
-        label: (<NavLink to='/article/123'>Главная</NavLink>),
+        label: <NavLink to="/article/123">123</NavLink>,
       },
       {
         id: 2,
-        label: (<NavLink to='/article/123'>Главная</NavLink>),
+        label: <NavLink to="/article/123123">123123</NavLink>,
       },
     ],
   },
@@ -50,11 +61,11 @@ const INITIAL_STATE: TreeNodeInfo[] = [
     childNodes: [
       {
         id: 4,
-        label: '123123123',
+        label: <NavLink to="/article/222">222</NavLink>,
       },
       {
         id: 5,
-        label: '123123123',
+        label: <NavLink to="/article/1555">1555</NavLink>,
       },
     ],
   },
@@ -80,7 +91,7 @@ export const Article: React.FC = () => {
     (_node: TreeNodeInfo, nodePath: NodePath) => {
       dispatch({
         payload: { path: nodePath, isExpanded: !_node.isExpanded },
-        type: "SET_IS_EXPANDED",
+        type: 'SET_IS_EXPANDED',
       });
     },
     []
@@ -89,16 +100,16 @@ export const Article: React.FC = () => {
   const handleNodeClick = useCallback(
     (_node: TreeNodeInfo, nodePath: NodePath) => {
       if (_node.hasCaret || _node.isSelected) {
-        return
+        return;
       }
 
-      dispatch({type: "DESELECT_ALL"});
+      dispatch({ type: 'DESELECT_ALL' });
       dispatch({
         payload: { path: nodePath, isSelected: !_node.isSelected },
-        type: "SET_IS_SELECTED",
+        type: 'SET_IS_SELECTED',
       });
 
-      setDrawerOpen(false)
+      setDrawerOpen(false);
     },
     []
   );
