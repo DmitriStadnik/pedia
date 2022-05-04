@@ -24,10 +24,12 @@ import mainPage from './mainPageData';
 
 import './Article.css';
 
-const NavLink: React.FC<{ to: string; children: ReactNode }> = ({
-  to,
-  children,
-}) => (
+interface NavLinkProps {
+  to: string;
+  children: ReactNode;
+}
+
+const NavLink: React.FC<NavLinkProps> = ({ to, children }) => (
   <Link className="drawer__link" to={to}>
     {children}
   </Link>

@@ -1,0 +1,11 @@
+.table table {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.admin__link {
+  text-align: right;
+  margin-right: 0;
+}
+
