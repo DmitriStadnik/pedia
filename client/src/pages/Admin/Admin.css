@@ -13,3 +13,9 @@
 .admin__spinner {
   margin-top: 100px;
 }
+
+.admin__spinner_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

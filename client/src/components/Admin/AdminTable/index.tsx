@@ -51,7 +51,7 @@ export const AdminTable: React.FC<AdminTableProps> = ({
           </thead>
           <tbody>
             {content.map((item, index) => (
-              <tr onClick={() => handleRowClick(item.id)} key={item.id}>
+              <tr onClick={() => handleRowClick(item._id)} key={item._id}>
                 <td>{index + 1}</td>
                 {columns.map((column) => (
                   <td key={`${column.key}-${item[column.key]}`}>
