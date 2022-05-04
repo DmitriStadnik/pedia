@@ -20,6 +20,10 @@ export const AdminTable: React.FC<AdminTableProps> = ({
   content,
   editPath = null,
 }) => {
+  if (!content || !content.length) {
+    return <Fragment />;
+  }
+
   const navigate = useNavigate();
 
   const handleRowClick = useCallback(
