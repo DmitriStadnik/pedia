@@ -28,10 +28,10 @@ export const articlesColumns = [
   },
   {
     title: 'Created',
-    key: 'dateCreated',
+    key: 'createdAt',
   },
   {
     title: 'Updated',
-    key: 'dateUpdated',
+    key: 'updatedAt',
   },
 ];

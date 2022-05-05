@@ -38,6 +38,8 @@ export class ArticleService {
     article.title = title;
     article.slug = slug;
     article.linkedArticles = linkedArticles ? linkedArticles.split(',') : [];
+    article.createdAt = new Date();
+    article.updatedAt = new Date();
 
     return this.articleRepository.save(article);
   }
@@ -46,7 +48,8 @@ export class ArticleService {
     const { affected } = await this.articleRepository.update(id, {
       ...body, 
       category: (await this.categoryRepository.findOne(category))._id.toString(), 
-      linkedArticles: linkedArticles ? linkedArticles.split(',') : []
+      linkedArticles: linkedArticles ? linkedArticles.split(',') : [],
+      updatedAt: new Date()
     });
 
     return affected === 1;

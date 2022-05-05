@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { articleApi } from '../../../utils/store/api/article';
+import { categoryApi } from '../../../utils/store/api/category';
 
-export const EditArticle: React.FC = () => {
+export const EditCategory: React.FC = () => {
   const { id } = useParams();
 
   if (!id) {
@@ -11,14 +11,14 @@ export const EditArticle: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const { article } = articleApi.useGetListQuery(undefined, {
+  const { category } = categoryApi.useGetListQuery(undefined, {
     selectFromResult: ({ data }) => ({
-      article: data?.find((item) => item._id === id),
+      category: data?.find((item) => item._id === id),
     }),
   });
 
-  if (!article) {
-    console.log('no article');
+  if (!category) {
+    console.log('no category');
     return <Fragment />;
   }
 
@@ -29,8 +29,8 @@ export const EditArticle: React.FC = () => {
   return (
     <div className="edit">
       <button onClick={handleBackClick}>back</button>
-      {article._id}
-      {article.title}
+      {category._id}
+      {category.title}
     </div>
   );
 };
