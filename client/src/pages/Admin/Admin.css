@@ -19,3 +19,7 @@
   display: flex;
   justify-content: center;
 }
+
+.edit__form__field {
+  width: 100%;
+}

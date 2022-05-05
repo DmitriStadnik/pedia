@@ -1,0 +1,38 @@
+export const toolbarConfig = {
+  options: ['blockType', 'list', 'image'],
+  blockType: {
+    inDropdown: false,
+    options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5'],
+    // className: undefined,
+    // component: undefined,
+    // dropdownClassName: undefined,
+  },
+  list: {
+    inDropdown: false,
+    // className: undefined,
+    // component: undefined,
+    // dropdownClassName: undefined,
+    options: ['unordered', 'ordered', 'indent', 'outdent'],
+    // unordered: { icon: unordered, className: undefined },
+    // ordered: { icon: ordered, className: undefined },
+    // indent: { icon: indent, className: undefined },
+    // outdent: { icon: outdent, className: undefined },
+  },
+  image: {
+    // icon: image,
+    // className: undefined,
+    // component: undefined,
+    // popupClassName: undefined,
+    urlEnabled: true,
+    uploadEnabled: true,
+    alignmentEnabled: true,
+    // uploadCallback: undefined,
+    previewImage: false,
+    inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+    alt: { present: false, mandatory: false },
+    defaultSize: {
+      height: 'auto',
+      width: 'auto',
+    },
+  },
+};

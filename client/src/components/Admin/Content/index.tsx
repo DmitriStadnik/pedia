@@ -11,24 +11,18 @@ import { articlesColumns, categoriesColumns } from './columns';
 export const AdminContent: React.FC = () => {
   const location = useLocation();
 
-  if (location.pathname.includes('edit/article')) {
-    return <EditArticle />;
-  }
-
-  if (location.pathname.includes('edit/category')) {
-    return <EditCategory />;
-  }
-
   const {
     data: articles,
     error: articlesError,
     isLoading: articlesLoading,
+    refetch: fetchArticles,
   } = articleApi.useGetListQuery();
 
   const {
     data: categories,
     error: categoriesError,
     isLoading: categoriesLoading,
+    refetch: fetchCategories,
   } = categoryApi.useGetListQuery();
 
   if (articlesError) {
@@ -42,6 +36,14 @@ export const AdminContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>('articles');
 
   const handleTabChange = (navbarTabId: TabId) => setActiveTab(navbarTabId);
+
+  if (location.pathname.includes('edit/article')) {
+    return <EditArticle />;
+  }
+
+  if (location.pathname.includes('edit/category')) {
+    return <EditCategory />;
+  }
 
   return (
     <Tabs
@@ -63,6 +65,7 @@ export const AdminContent: React.FC = () => {
               columns={articlesColumns}
               content={articles}
               editPath="edit/article"
+              reloadFunc={fetchArticles}
             />
           }
         />
@@ -81,6 +84,7 @@ export const AdminContent: React.FC = () => {
               columns={categoriesColumns}
               content={categories}
               editPath="edit/category"
+              reloadFunc={fetchCategories}
             />
           }
         />

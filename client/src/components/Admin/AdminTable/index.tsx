@@ -1,4 +1,4 @@
-import { HTMLTable } from '@blueprintjs/core';
+import { Button, HTMLTable } from '@blueprintjs/core';
 import React, { Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isDate } from '../../../utils/utils';
@@ -12,6 +12,7 @@ interface AdminTableColumn {
 
 interface AdminTableProps {
   columns: AdminTableColumn[];
+  reloadFunc: () => void;
   content?: Array<Record<string, any>>;
   editPath?: string;
 }
@@ -46,6 +47,7 @@ const renderCellContent = (item: any): string => {
 
 export const AdminTable: React.FC<AdminTableProps> = ({
   columns,
+  reloadFunc,
   content = null,
   editPath = null,
 }) => {
@@ -66,9 +68,21 @@ export const AdminTable: React.FC<AdminTableProps> = ({
     [editPath]
   );
 
+  const handleAddClick = useCallback(() => {
+    if (!editPath) {
+      return;
+    }
+
+    navigate(`/admin/${editPath}/new`);
+  }, [editPath]);
+
   return (
     <Fragment>
       <div className="table">
+        <div className="buttons">
+          <Button minimal onClick={reloadFunc} icon="refresh" />
+          <Button minimal onClick={handleAddClick} icon="plus" />
+        </div>
         <HTMLTable condensed striped interactive>
           <thead>
             <tr>

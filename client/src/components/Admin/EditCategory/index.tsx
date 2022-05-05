@@ -1,3 +1,4 @@
+import { Button } from '@blueprintjs/core';
 import React, { Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { categoryApi } from '../../../utils/store/api/category';
@@ -28,7 +29,7 @@ export const EditCategory: React.FC = () => {
 
   return (
     <div className="edit">
-      <button onClick={handleBackClick}>back</button>
+      <Button minimal onClick={handleBackClick} text="Back" />
       {category._id}
       {category.title}
     </div>
