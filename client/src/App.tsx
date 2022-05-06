@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Article } from './pages/Article';
 import { Admin } from './pages/Admin';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import store from './utils/store/store';
 
 const App: React.FC = () => {
@@ -20,6 +22,7 @@ const App: React.FC = () => {
           </Routes>
         </div>
       </BrowserRouter>
+      <ToastContainer autoClose={1000} hideProgressBar pauseOnHover />
     </Provider>
   );
 };
