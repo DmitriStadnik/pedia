@@ -27,17 +27,12 @@ export const TextEditor: React.FC<{ name: string }> = ({ name }) => {
 
   return (
     <div className="edit__form__text_editor">
-      {field.value}
       <Editor
         editorState={editorState}
         wrapperClassName="edit__form__text_editor_wrapper"
         editorClassName="edit__form__text_editor_editor"
         onEditorStateChange={onEditorChange}
         toolbar={toolbarConfig}
-      />
-      <textarea
-        disabled
-        value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
       />
       {meta.error && meta.touched && <div>{meta.error}</div>}
     </div>

@@ -23,3 +23,53 @@
 .edit__form__field {
   width: 100%;
 }
+
+.edit__form__text_editor {
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 2px;
+}
+
+.edit__form__text_editor .rdw-editor-toolbar {
+  border-bottom: 1px solid rgb(118, 118, 118);
+}
+
+.edit__form__text_editor_editor {
+  height: 500px;
+  padding: 5px;
+}
+
+.edit {
+  margin-bottom: 200px;
+}
+
+.edit__form__select_articles {
+  position: relative;
+}
+
+.edit__form__suggest {
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 2px;
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  background: white;
+}
+
+.edit__form__suggest_item {
+  padding: 5px;
+  margin: 0;
+}
+
+.edit__form__suggest_item:hover {
+  background: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.edit__form__tags {
+  margin-bottom: 10px;
+  padding: 5px 0;
+}
+
+.edit__form__tag {
+  margin-right: 5px;
+}

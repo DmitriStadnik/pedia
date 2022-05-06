@@ -6,6 +6,7 @@ import { articleApi } from '../../../utils/store/api/article';
 import { ArticleDTO } from '../../../utils/dto/article';
 import { categoryApi } from '../../../utils/store/api/category';
 import { TextEditor } from '../TextEditor';
+import { LinkedArticles } from '../LinkedArticles';
 
 export const EditArticle: React.FC = () => {
   const { id } = useParams();
@@ -16,11 +17,12 @@ export const EditArticle: React.FC = () => {
     isLoading: categoriesLoading,
   } = categoryApi.useGetListQuery();
 
-  const { article } = articleApi.useGetListQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      article: data?.find((item) => item._id === id),
-    }),
-  });
+  const {
+    data: articles,
+    isLoading: articlesLoading,
+  } = articleApi.useGetListQuery();
+
+  const article = articles?.find((item) => item._id === id);
 
   const handleBackClick = () => {
     navigate('/admin');
@@ -75,21 +77,13 @@ export const EditArticle: React.FC = () => {
             </FormGroup>
           )}
           <FormGroup label="Content" labelFor="content">
-            {/* <Field id="content" name="content" className="edit__form__field" /> */}
             <TextEditor name="content" />
           </FormGroup>
-
-          {/* <label htmlFor="lastName">Last Name</label>
-         <Field id="lastName" name="lastName" placeholder="Doe" />
-
-         <label htmlFor="email">Email</label>
-         <Field
-           id="email"
-           name="email"
-           placeholder="john@acme.com"
-           type="email"
-         /> */}
-
+          {articlesLoading || (
+            <FormGroup label="LinkedArticles" labelFor="linkedArticles">
+              <LinkedArticles name="linkedArticles" articles={articles || []} />
+            </FormGroup>
+          )}
           <Button type="submit" text="Submit" />
         </Form>
       </Formik>
