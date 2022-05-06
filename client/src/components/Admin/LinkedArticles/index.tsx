@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
-import { ArticleDTO } from '../../../utils/dto/article';
+import { Article } from '../../../utils/dto/article';
 import { InputGroup, Tag } from '@blueprintjs/core';
 
 export const LinkedArticles: React.FC<{
   name: string;
-  articles: ArticleDTO[];
+  articles: Article[];
 }> = ({ name, articles }) => {
   const [field, , helpers] = useField(name);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [suggestions, setSuggestions] = useState<ArticleDTO[]>();
+  const [suggestions, setSuggestions] = useState<Article[]>();
 
   const handleRemoveTag = (id: string) => {
     const newArray = [...field.value];

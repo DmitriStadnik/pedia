@@ -19,6 +19,10 @@ export const articlesColumns = [
     key: 'slug',
   },
   {
+    title: 'Is Main',
+    key: 'isMainArticle',
+  },
+  {
     title: 'Category',
     key: 'category',
   },

@@ -1,16 +1,31 @@
-import { Button, FormGroup, H4 } from '@blueprintjs/core';
-import React, { Fragment } from 'react';
+import { Button, FormGroup, H4, Spinner } from '@blueprintjs/core';
+import React, { Fragment, useMemo } from 'react';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
 import { articleApi } from '../../../utils/store/api/article';
-import { ArticleDTO } from '../../../utils/dto/article';
+import { Article } from '../../../utils/dto/article';
 import { categoryApi } from '../../../utils/store/api/category';
 import { TextEditor } from '../TextEditor';
 import { LinkedArticles } from '../LinkedArticles';
+import { toast } from 'react-toastify';
+
+const newArticle: Article = {
+  category: '',
+  content: '',
+  createdAt: new Date(),
+  isMainArticle: false,
+  linkedArticles: [''],
+  slug: '',
+  title: '',
+  updatedAt: new Date(),
+  _id: 'new',
+};
 
 export const EditArticle: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const [updateArticle] = articleApi.useUpdateMutation();
 
   const {
     data: categories,
@@ -28,28 +43,45 @@ export const EditArticle: React.FC = () => {
     navigate('/admin');
   };
 
-  if (!id || !article) {
+  const handleSubmit = async (
+    values: Article,
+    { setSubmitting }: FormikHelpers<Article>
+  ) => {
+    try {
+      await updateArticle(values).unwrap();
+    } catch (e) {
+      toast('Error occured', {
+        type: 'error',
+      });
+    } finally {
+      setSubmitting(false);
+      toast('Success', {
+        type: 'success',
+      });
+    }
+  };
+
+  const getArticle = useMemo(() => {
+    return article || newArticle;
+  }, [article]);
+
+  if (!id) {
     return <Fragment />;
+  }
+
+  if (categoriesLoading || articlesLoading) {
+    return <Spinner />;
   }
 
   return (
     <div className="edit">
       <H4>
         <Button minimal onClick={handleBackClick} icon="arrow-left" />
-        Edit article #{article._id}
+        {id === 'new'
+          ? 'Create new article'
+          : `Edit article #${getArticle._id}`}
       </H4>
-      <Formik
-        initialValues={{ ...article }}
-        onSubmit={(
-          values: ArticleDTO,
-          { setSubmitting }: FormikHelpers<ArticleDTO>
-        ) => {
-          setTimeout(() => {
-            console.log(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 500);
-        }}
-      >
+      <Formik initialValues={{ ...getArticle }} onSubmit={handleSubmit}>
         <Form>
           <FormGroup label="Title" labelFor="title">
             <Field id="title" name="title" className="edit__form__field" />
@@ -68,6 +100,7 @@ export const EditArticle: React.FC = () => {
                 as="select"
                 className="edit__form__field"
               >
+                {id === 'new' && <option disabled value=""></option>}
                 {categories?.map((category) => (
                   <option key={category.slug} value={category._id}>
                     {category.title}
