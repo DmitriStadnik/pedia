@@ -26,6 +26,7 @@ export const EditArticle: React.FC = () => {
   const navigate = useNavigate();
 
   const [updateArticle] = articleApi.useUpdateMutation();
+  const [createArticle] = articleApi.useCreateMutation();
 
   const {
     data: categories,
@@ -39,6 +40,28 @@ export const EditArticle: React.FC = () => {
 
   const article = articles?.find((item) => item._id === id);
 
+  const validateForm = (values: Article) => {
+    const errors: Record<string, any> = {};
+
+    if (!values.title) {
+      errors.title = 'Must not be empty';
+    }
+
+    if (!values.slug) {
+      errors.slug = 'Must not be empty';
+    }
+
+    if (!values.category || values.category === '') {
+      errors.category = 'Choose category';
+    }
+
+    if (!values.content) {
+      errors.content = 'Must not be empty';
+    }
+
+    return errors;
+  };
+
   const handleBackClick = () => {
     navigate('/admin');
   };
@@ -48,7 +71,13 @@ export const EditArticle: React.FC = () => {
     { setSubmitting }: FormikHelpers<Article>
   ) => {
     try {
-      await updateArticle(values).unwrap();
+      if (id === 'new') {
+        await createArticle(values).unwrap();
+      } else {
+        await updateArticle(values).unwrap();
+      }
+
+      navigate('/admin');
     } catch (e) {
       toast('Error occured', {
         type: 'error',
@@ -81,44 +110,65 @@ export const EditArticle: React.FC = () => {
           ? 'Create new article'
           : `Edit article #${getArticle._id}`}
       </H4>
-      <Formik initialValues={{ ...getArticle }} onSubmit={handleSubmit}>
-        <Form>
-          <FormGroup label="Title" labelFor="title">
-            <Field id="title" name="title" className="edit__form__field" />
-          </FormGroup>
-          <FormGroup label="Slug" labelFor="slug">
-            <Field id="slug" name="slug" className="edit__form__field" />
-          </FormGroup>
-          <FormGroup label="Main article" labelFor="isMainArticle">
-            <Field id="isMainArticle" type="checkbox" name="isMainArticle" />
-          </FormGroup>
-          {categoriesLoading || (
-            <FormGroup label="Category" labelFor="category">
-              <Field
-                id="category"
-                name="category"
-                as="select"
-                className="edit__form__field"
-              >
-                {id === 'new' && <option disabled value=""></option>}
-                {categories?.map((category) => (
-                  <option key={category.slug} value={category._id}>
-                    {category.title}
-                  </option>
-                ))}
-              </Field>
+      <Formik
+        initialValues={{ ...getArticle }}
+        onSubmit={handleSubmit}
+        validate={validateForm}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            <FormGroup label="Title" labelFor="title">
+              <Field id="title" name="title" className="edit__form__field" />
+              {errors.title && touched.title ? (
+                <p className="edit__form__error">{errors.title}</p>
+              ) : null}
             </FormGroup>
-          )}
-          <FormGroup label="Content" labelFor="content">
-            <TextEditor name="content" />
-          </FormGroup>
-          {articlesLoading || (
-            <FormGroup label="LinkedArticles" labelFor="linkedArticles">
-              <LinkedArticles name="linkedArticles" articles={articles || []} />
+            <FormGroup label="Slug" labelFor="slug">
+              <Field id="slug" name="slug" className="edit__form__field" />
+              {errors.slug && touched.slug ? (
+                <p className="edit__form__error">{errors.slug}</p>
+              ) : null}
             </FormGroup>
-          )}
-          <Button type="submit" text="Submit" />
-        </Form>
+            <FormGroup label="Main article" labelFor="isMainArticle">
+              <Field id="isMainArticle" type="checkbox" name="isMainArticle" />
+            </FormGroup>
+            {categoriesLoading || (
+              <FormGroup label="Category" labelFor="category">
+                <Field
+                  id="category"
+                  name="category"
+                  as="select"
+                  className="edit__form__field"
+                >
+                  {id === 'new' && <option disabled value=""></option>}
+                  {categories?.map((category) => (
+                    <option key={category.slug} value={category._id}>
+                      {category.title}
+                    </option>
+                  ))}
+                </Field>
+                {errors.category && touched.category ? (
+                  <p className="edit__form__error">{errors.category}</p>
+                ) : null}
+              </FormGroup>
+            )}
+            <FormGroup label="Content" labelFor="content">
+              <TextEditor name="content" />
+              {errors.content && touched.content ? (
+                <p className="edit__form__error">{errors.content}</p>
+              ) : null}
+            </FormGroup>
+            {articlesLoading || (
+              <FormGroup label="LinkedArticles" labelFor="linkedArticles">
+                <LinkedArticles
+                  name="linkedArticles"
+                  articles={articles || []}
+                />
+              </FormGroup>
+            )}
+            <Button type="submit" text="Submit" />
+          </Form>
+        )}
       </Formik>
     </div>
   );

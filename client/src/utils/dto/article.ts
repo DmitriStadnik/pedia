@@ -27,5 +27,4 @@ export type ArticleCreateDTO = {
   linkedArticles: string[];
   slug: string;
   title: string;
-  _id: string;
 };

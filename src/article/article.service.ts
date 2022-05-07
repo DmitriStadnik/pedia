@@ -39,7 +39,9 @@ export class ArticleService {
     article.isMainArticle = !!isMainArticle;
     article.title = title;
     article.slug = slug;
-    article.linkedArticles = linkedArticles || [];
+    article.linkedArticles = linkedArticles
+      ? linkedArticles.filter((article) => article)
+      : [];
     article.createdAt = new Date();
     article.updatedAt = new Date();
 
@@ -55,7 +57,9 @@ export class ArticleService {
       category: (
         await this.categoryRepository.findOne(category)
       )._id.toString(),
-      linkedArticles: linkedArticles || [],
+      linkedArticles: linkedArticles
+        ? linkedArticles.filter((article) => article)
+        : [],
       updatedAt: new Date(),
     });
 

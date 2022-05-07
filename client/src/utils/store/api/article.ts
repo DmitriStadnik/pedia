@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Article, ArticleUpdateDTO } from '../../dto/article';
+import { Article, ArticleCreateDTO, ArticleUpdateDTO } from '../../dto/article';
 
 export const articleApi = createApi({
   reducerPath: 'articleApi',
@@ -26,26 +26,22 @@ export const articleApi = createApi({
       void,
       Pick<ArticleUpdateDTO, '_id'> & Partial<ArticleUpdateDTO>
     >({
-      query: ({ _id, ...patch }) => ({
+      query: ({ _id, ...body }) => ({
         url: `article/${_id}`,
         method: 'PUT',
-        body: patch,
+        body,
       }),
-      async onQueryStarted({ _id, ...patch }, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          articleApi.util.updateQueryData('getList', undefined, (draft) => {
-            Object.assign(draft, patch);
-          })
-        );
-        try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
-        }
-      },
       invalidatesTags: (result, error, { _id }) => [
         { type: 'Articles', id: _id },
       ],
+    }),
+    create: builder.mutation<void, Partial<ArticleCreateDTO>>({
+      query: (body) => ({
+        url: `article`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Articles', id: 'LIST' }],
     }),
   }),
 });
@@ -54,4 +50,5 @@ export const {
   useGetByIdQuery,
   useGetListQuery,
   useUpdateMutation,
+  useCreateMutation,
 } = articleApi;
