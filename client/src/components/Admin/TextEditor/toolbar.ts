@@ -1,5 +1,5 @@
 export const toolbarConfig = {
-  options: ['blockType', 'list', 'image'],
+  options: ['blockType', 'list', 'image', 'link'],
   blockType: {
     inDropdown: false,
     options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5'],

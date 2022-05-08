@@ -11,6 +11,10 @@ type TreeAction =
   | {
       type: 'SET_IS_SELECTED';
       payload: { path: NodePath; isSelected: boolean };
+    }
+  | {
+      type: 'UPDATE_TREE';
+      payload: { newState: TreeNodeInfo[] };
     };
 
 function forEachNode(
@@ -57,6 +61,8 @@ export function treeReducer(state: TreeNodeInfo[], action: TreeAction) {
         (node) => (node.isSelected = action.payload.isSelected)
       );
       return newState3;
+    case 'UPDATE_TREE':
+      return [...action.payload.newState];
     default:
       return state;
   }

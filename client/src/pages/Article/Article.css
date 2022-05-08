@@ -20,13 +20,13 @@
   font-weight: 500;
 }
 
-.drawer__tree .bp3-tree-node-label {
+.drawer__tree .bp4-tree-node-label {
   display: flex;
   height: 100%;
   align-items: center;
 }
 
-.bp3-tree-node-selected .drawer__link {
+.bp4-tree-node-selected .drawer__link {
   color: white;
 }
 
@@ -76,17 +76,17 @@
   transition: 0.1s;
 }
 
-.bp3-button.button_nobg {
+.bp4-button.button_nobg {
   background: none;
 }
 
-.bp3-button.button_nobg:hover {
+.bp4-button.button_nobg:hover {
   background: none;
   opacity: 0.5;
 }
 
 @media screen and (max-width: 600px) {
-  .drawer.bp3-drawer {
+  .drawer.bp4-drawer {
     width: 100%;
   }
 }
