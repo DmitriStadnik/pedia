@@ -8,6 +8,7 @@ import { categoryApi } from '../../../utils/store/api/category';
 import { TextEditor } from '../TextEditor';
 import { LinkedArticles } from '../LinkedArticles';
 import { toast } from 'react-toastify';
+import { translitRus } from '../../../utils/utils';
 
 const newArticle: Article = {
   category: '',
@@ -115,7 +116,7 @@ export const EditArticle: React.FC = () => {
         onSubmit={handleSubmit}
         validate={validateForm}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, setFieldValue, values }) => (
           <Form>
             <FormGroup label="Title" labelFor="title">
               <Field id="title" name="title" className="edit__form__field" />
@@ -125,6 +126,12 @@ export const EditArticle: React.FC = () => {
             </FormGroup>
             <FormGroup label="Slug" labelFor="slug">
               <Field id="slug" name="slug" className="edit__form__field" />
+              <Button
+                type="button"
+                onClick={() => setFieldValue('slug', translitRus(values.title))}
+              >
+                Generate slug
+              </Button>
               {errors.slug && touched.slug ? (
                 <p className="edit__form__error">{errors.slug}</p>
               ) : null}

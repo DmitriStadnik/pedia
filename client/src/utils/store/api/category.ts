@@ -31,7 +31,7 @@ export const categoryApi = createApi({
       Pick<CategoryUpdateDTO, '_id'> & Partial<CategoryUpdateDTO>
     >({
       query: ({ _id, ...body }) => ({
-        url: `article/${_id}`,
+        url: `category/${_id}`,
         method: 'PUT',
         body,
       }),
@@ -41,7 +41,7 @@ export const categoryApi = createApi({
     }),
     create: builder.mutation<void, Partial<CategoryCreateDTO>>({
       query: (body) => ({
-        url: `article`,
+        url: `category`,
         method: 'POST',
         body,
       }),
