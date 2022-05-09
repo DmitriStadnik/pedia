@@ -2,21 +2,24 @@ import { ArticleDTO } from './../shared/dto/article.dto';
 import { Article } from './../shared/entities/Article.entity';
 import { Controller, Get, Post, Body, Put, Delete, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { ArticleService } from './article.service';
+import { Public } from 'src/admin/public.guard';
 
 @Controller('/article/')
 export class ArticleController {
   constructor(public articleService: ArticleService) {}
 
+  @Public()
   @Get()
   async getAll(): Promise<Article[]> {
     return await this.articleService.getAll();
   }
 
-  @Get('test-error')
-  async test(): Promise<any> {
-    throw new HttpException('Test', HttpStatus.INTERNAL_SERVER_ERROR);;
-  }
+  // @Get('test-error')
+  // async test(): Promise<any> {
+  //   throw new HttpException('Test', HttpStatus.INTERNAL_SERVER_ERROR);;
+  // }
 
+  @Public()
   @Get(':id')
   async getById(@Param('id') id: string): Promise<Article> {
     return await this.articleService.getById(id);

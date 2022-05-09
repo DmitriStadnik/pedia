@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { Article } from './shared/entities/Article.entity';
 import { Category } from './shared/entities/Category.entity';
 import { CategoryModule } from './category/category.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { CategoryModule } from './category/category.module';
       },
     }),
     CategoryModule,
-    ArticleModule
+    ArticleModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

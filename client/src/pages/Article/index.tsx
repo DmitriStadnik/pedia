@@ -23,6 +23,7 @@ import {
 import parse, {
   domToReact,
   Element as HTMLParserElement,
+  HTMLReactParserOptions,
 } from 'html-react-parser';
 import { Footer } from '../../components/Footer';
 import { Article } from '../../utils/dto/article';
@@ -106,13 +107,14 @@ const createArticlesTree = (
 
 const renderArticle = (
   content: string,
-  handleImageClick: (title: string, src: string) => void
+  handleImageClick: (title: string, src: string) => void,
+  articles: Article[]
 ) => {
   if (!content) {
     return <Fragment />;
   }
 
-  return parse(content, {
+  const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof HTMLParserElement && domNode.attribs) {
         if (domNode.children.length === 0 && domNode.name !== 'img') {
@@ -127,7 +129,23 @@ const renderArticle = (
 
         if (domNode.name === 'p') {
           return (
-            <p className="article__text">{domToReact(domNode.children)}</p>
+            <p className="article__text">
+              {domToReact(domNode.children, options)}
+            </p>
+          );
+        }
+
+        if (domNode.name === 'a') {
+          const linkHref = domNode.attribs.href;
+          const article = articles.find((item) => item.title === linkHref);
+
+          if (!article) {
+            return <span>{domToReact(domNode.children)}</span>;
+          }
+          return (
+            <Link className="article__link" to={`/article/${article.slug}`}>
+              {domToReact(domNode.children)}
+            </Link>
           );
         }
 
@@ -148,7 +166,9 @@ const renderArticle = (
         }
       }
     },
-  });
+  };
+
+  return parse(content, options);
 };
 
 export const ArticlePage: React.FC = () => {
@@ -230,9 +250,9 @@ export const ArticlePage: React.FC = () => {
       return '';
     }
     if (!article) {
-      return renderArticle(mainPage.content, handleImageClick);
+      return renderArticle(mainPage.content, handleImageClick, articles || []);
     }
-    return renderArticle(article.content, handleImageClick);
+    return renderArticle(article.content, handleImageClick, articles || []);
   }, [article]);
 
   const getLinks = useCallback(
