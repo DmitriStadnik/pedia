@@ -72,6 +72,32 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
+.article__img_wrapper {
+  margin: auto;
+}
+
+.article__img_text {
+  font-size: 12px;
+  text-align: center;
+}
+
+.article__img {
+  max-width: 400px;
+  width: 100%;
+  cursor: pointer;
+  display: block;
+  margin: auto;
+}
+
+.modal {
+  width: 90%;
+  max-width: 1900px;
+}
+
+.modal__img {
+  width: 100%;
+}
+
 .button {
   transition: 0.1s;
 }
@@ -88,5 +114,9 @@
 @media screen and (max-width: 600px) {
   .drawer.bp4-drawer {
     width: 100%;
+  }
+
+  .header__text.bp4-heading {
+    font-size: 16px;
   }
 }

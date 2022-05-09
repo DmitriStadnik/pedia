@@ -3,6 +3,7 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from 'react';
@@ -17,7 +18,12 @@ import {
   IconSize,
   Tree,
   TreeNodeInfo,
+  Dialog,
 } from '@blueprintjs/core';
+import parse, {
+  domToReact,
+  Element as HTMLParserElement,
+} from 'html-react-parser';
 import { Footer } from '../../components/Footer';
 import { Article } from '../../utils/dto/article';
 import { Category } from '../../utils/dto/category';
@@ -51,18 +57,16 @@ const drawerProps = {
 
 const createArticlesTree = (
   articles: Article[] | undefined,
-  categories: Category[] | undefined
+  categories: Category[] | undefined,
+  selectedId: string
 ): TreeNodeInfo[] => {
-  const tree: TreeNodeInfo[] = [
-    {
-      id: 0,
-      label: <NavLink to="/">Главная</NavLink>,
-      isSelected: true,
-    },
-  ];
-
+  const mainPageNode: TreeNodeInfo = {
+    id: 0,
+    label: <NavLink to="/">Главная</NavLink>,
+    isSelected: !selectedId,
+  };
   if (!articles || !categories) {
-    return tree;
+    return [mainPageNode];
   }
 
   let index = 1;
@@ -77,6 +81,7 @@ const createArticlesTree = (
 
         return {
           id: index,
+          isSelected: selectedId === article._id,
           label: (
             <NavLink to={`/article/${article.slug}`}>{article.title}</NavLink>
           ),
@@ -92,23 +97,58 @@ const createArticlesTree = (
       hasCaret: true,
       label: category.title,
       childNodes: children,
+      isExpanded: children.find((child) => child.isSelected) !== undefined,
     };
   });
 
-  return newTree;
+  return [mainPageNode, ...newTree];
 };
 
-const renderArticle = (article: Article | undefined) => {
-  if (!article) {
+const renderArticle = (
+  content: string,
+  handleImageClick: (title: string, src: string) => void
+) => {
+  if (!content) {
     return <Fragment />;
   }
-  console.log(article);
-  return (
-    <>
-      <H5 className="article__header">Название сегмента</H5>
-      <p className="article__text">Название сегмента</p>
-    </>
-  );
+
+  return parse(content, {
+    replace: (domNode) => {
+      if (domNode instanceof HTMLParserElement && domNode.attribs) {
+        if (domNode.children.length === 0 && domNode.name !== 'img') {
+          return <Fragment />;
+        }
+
+        if (domNode.name === 'h5') {
+          return (
+            <H5 className="article__header">{domToReact(domNode.children)}</H5>
+          );
+        }
+
+        if (domNode.name === 'p') {
+          return (
+            <p className="article__text">{domToReact(domNode.children)}</p>
+          );
+        }
+
+        if (domNode.name === 'img') {
+          return (
+            <div className="article__img_wrapper">
+              <img
+                className="article__img"
+                src={domNode.attribs.src}
+                alt={domNode.attribs.alt}
+                onClick={() =>
+                  handleImageClick(domNode.attribs.alt, domNode.attribs.src)
+                }
+              />
+              <p className="article__img_text">{domNode.attribs.alt}</p>
+            </div>
+          );
+        }
+      }
+    },
+  });
 };
 
 export const ArticlePage: React.FC = () => {
@@ -137,12 +177,16 @@ export const ArticlePage: React.FC = () => {
   const article = articles?.find((item) => item.slug === slug);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [imageView, setImageView] = useState<{ title: string; src: string }>();
   const [articlesTree, dispatch] = useReducer(
     treeReducer,
-    createArticlesTree(articles, categories)
+    createArticlesTree(articles, categories, article?._id || '')
   );
 
   const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
+  const handleImageClick = (title: string, src: string) => {
+    setImageView({ title, src });
+  };
 
   const handleNodeToggle = useCallback(
     (_node: TreeNodeInfo, nodePath: NodePath) => {
@@ -171,11 +215,54 @@ export const ArticlePage: React.FC = () => {
     []
   );
 
+  const getTitle = useMemo(() => {
+    if (articlesLoading) {
+      return '';
+    }
+    if (!article) {
+      return mainPage.title;
+    }
+    return article.title;
+  }, [article]);
+
+  const getContent = useMemo(() => {
+    if (articlesLoading) {
+      return '';
+    }
+    if (!article) {
+      return renderArticle(mainPage.content, handleImageClick);
+    }
+    return renderArticle(article.content, handleImageClick);
+  }, [article]);
+
+  const getLinks = useCallback(
+    (linkedArticles: string[]) => {
+      if (articlesLoading || !articles) {
+        return <Fragment />;
+      }
+
+      return articles
+        .filter((item) => linkedArticles.includes(item._id))
+        .map((item) => (
+          <Link to={`/article/${item.slug}`} key={item.slug}>
+            {item.title}
+          </Link>
+        ));
+    },
+    [articles]
+  );
+
   useEffect(() => {
     if (!articlesLoading && !categoriesLoading) {
       dispatch({
         type: 'UPDATE_TREE',
-        payload: { newState: createArticlesTree(articles, categories) },
+        payload: {
+          newState: createArticlesTree(
+            articles,
+            categories,
+            article?._id || ''
+          ),
+        },
       });
     }
   }, [articlesLoading, categoriesLoading, articles, categories]);
@@ -217,31 +304,34 @@ export const ArticlePage: React.FC = () => {
             icon={<Icon icon="menu" size={IconSize.LARGE} intent="primary" />}
             minimal
           />
-          <H3 className="header__text header__text_center">{mainPage.title}</H3>
+          <H3 className="header__text header__text_center">{getTitle}</H3>
         </div>
-        <div className="article">
-          {articlesLoading || renderArticle(article)}
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-          <H5 className="article__header">Название сегмента</H5>
-          <p className="article__text">{mainPage.content}</p>
-        </div>
+        <div className="article">{getContent}</div>
+        {!articlesLoading && article && article.linkedArticles && (
+          <div className="links">
+            <H5 className="article__header">Ссылки</H5>
+            {getLinks(article.linkedArticles)}
+          </div>
+        )}
       </div>
       <Footer />
+      {imageView !== undefined && (
+        <Dialog
+          isOpen={imageView !== undefined}
+          canEscapeKeyClose
+          canOutsideClickClose
+          isCloseButtonShown
+          title={imageView?.title}
+          onClose={() => setImageView(undefined)}
+          className="modal"
+        >
+          <img
+            className="modal__img"
+            src={imageView?.src}
+            alt={imageView?.title}
+          />
+        </Dialog>
+      )}
     </Fragment>
   );
 };
