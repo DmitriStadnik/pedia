@@ -4,11 +4,24 @@ import {
   CategoryCreateDTO,
   CategoryUpdateDTO,
 } from '../../dto/category';
+import { RootState } from '../store';
 
 export const categoryApi = createApi({
   reducerPath: 'categoryApi',
   tagTypes: ['Categories'],
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.REACT_APP_API_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const {
+        auth: { token },
+      } = getState() as RootState;
+
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getById: builder.query<Category, string>({
       query: (id) => `category/${id}`,

@@ -1,5 +1,5 @@
 import { Button, Card, H5, InputGroup, Intent } from '@blueprintjs/core';
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { FormEvent, Fragment, useCallback, useState } from 'react';
 
 import './Login.css';
 
@@ -32,31 +32,37 @@ export const Login: React.FC<LoginProps> = ({ handleLogin }) => {
     setShowPassword(!showPassword);
   };
 
-  const handleButtonClick = useCallback(() => {
-    handleLogin(password);
-  }, [password]);
+  const handleButtonClick = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      handleLogin(password);
+    },
+    [password]
+  );
 
   return (
     <Fragment>
       <div className="login">
         <Card className="login__card">
           <H5 className="login__header">Enter password</H5>
-          <InputGroup
-            large
-            placeholder=""
-            rightElement={
-              <LockButton
-                showPassword={showPassword}
-                handleLockClick={handleLockClick}
-              />
-            }
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <Button className="button button_login" onClick={handleButtonClick}>
-            Enter
-          </Button>
+          <form onSubmit={(e) => handleButtonClick(e)}>
+            <InputGroup
+              large
+              placeholder=""
+              rightElement={
+                <LockButton
+                  showPassword={showPassword}
+                  handleLockClick={handleLockClick}
+                />
+              }
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <Button className="button button_login" type="submit">
+              Enter
+            </Button>
+          </form>
         </Card>
       </div>
     </Fragment>

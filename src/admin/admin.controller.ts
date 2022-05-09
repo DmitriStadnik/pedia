@@ -3,11 +3,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
+import { Public } from './public.guard';
 
 @Controller('/admin/')
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
+  @Public()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {

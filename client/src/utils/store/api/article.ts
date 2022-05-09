@@ -1,10 +1,23 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Article, ArticleCreateDTO, ArticleUpdateDTO } from '../../dto/article';
+import { RootState } from '../store';
 
 export const articleApi = createApi({
   reducerPath: 'articleApi',
   tagTypes: ['Articles'],
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.REACT_APP_API_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const {
+        auth: { token },
+      } = getState() as RootState;
+
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getById: builder.query<Article, string>({
       query: (id) => `article/${id}`,
@@ -26,11 +39,13 @@ export const articleApi = createApi({
       void,
       Pick<ArticleUpdateDTO, '_id'> & Partial<ArticleUpdateDTO>
     >({
-      query: ({ _id, ...body }) => ({
-        url: `article/${_id}`,
-        method: 'PUT',
-        body,
-      }),
+      query: ({ _id, ...body }) => {
+        return {
+          url: `article/${_id}`,
+          method: 'PUT',
+          body,
+        };
+      },
       invalidatesTags: (result, error, { _id }) => [
         { type: 'Articles', id: _id },
       ],

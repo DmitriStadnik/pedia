@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { articleApi } from './api/article';
 import { categoryApi } from './api/category';
+import authReducer from './slices/auth';
 
 const store = configureStore({
   reducer: {
     [articleApi.reducerPath]: articleApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

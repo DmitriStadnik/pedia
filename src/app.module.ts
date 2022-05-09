@@ -10,6 +10,7 @@ import { Article } from './shared/entities/Article.entity';
 import { Category } from './shared/entities/Category.entity';
 import { CategoryModule } from './category/category.module';
 import { AdminModule } from './admin/admin.module';
+import { Config } from './shared/entities/Config.entity';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { AdminModule } from './admin/admin.module';
           url: url,
           useNewUrlParser: true,
           logging: true,
-          entities: [Article, Category],
+          entities: [Article, Category, Config],
           synchronize: false,
           maxQueryExecutionTime: 5000,
         };

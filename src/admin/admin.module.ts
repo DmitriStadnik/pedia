@@ -8,6 +8,8 @@ import { AdminController } from './admin.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Config } from 'src/shared/entities/Config.entity';
 
 @Module({
   controllers: [AdminController],
@@ -17,6 +19,7 @@ import { APP_GUARD } from '@nestjs/core';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '24h' },
     }),
+    TypeOrmModule.forFeature([Config]),
   ],
   providers: [
     AdminService,

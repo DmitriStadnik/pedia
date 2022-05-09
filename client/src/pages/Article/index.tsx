@@ -243,7 +243,7 @@ export const ArticlePage: React.FC = () => {
       return mainPage.title;
     }
     return article.title;
-  }, [article]);
+  }, [article, articlesLoading]);
 
   const getContent = useMemo(() => {
     if (articlesLoading) {
@@ -253,7 +253,7 @@ export const ArticlePage: React.FC = () => {
       return renderArticle(mainPage.content, handleImageClick, articles || []);
     }
     return renderArticle(article.content, handleImageClick, articles || []);
-  }, [article]);
+  }, [article, articlesLoading]);
 
   const getLinks = useCallback(
     (linkedArticles: string[]) => {
@@ -264,7 +264,11 @@ export const ArticlePage: React.FC = () => {
       return articles
         .filter((item) => linkedArticles.includes(item._id))
         .map((item) => (
-          <Link to={`/article/${item.slug}`} key={item.slug}>
+          <Link
+            to={`/article/${item.slug}`}
+            key={item.slug}
+            className="link__linked"
+          >
             {item.title}
           </Link>
         ));
