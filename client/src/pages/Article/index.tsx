@@ -307,7 +307,7 @@ export const ArticlePage: React.FC = () => {
           <H3 className="header__text header__text_center">{getTitle}</H3>
         </div>
         <div className="article">{getContent}</div>
-        {!articlesLoading && article && article.linkedArticles && (
+        {!articlesLoading && article && article.linkedArticles.length > 0 && (
           <div className="links">
             <H5 className="article__header">Ссылки</H5>
             {getLinks(article.linkedArticles)}
