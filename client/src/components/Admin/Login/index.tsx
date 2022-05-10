@@ -44,7 +44,7 @@ export const Login: React.FC<LoginProps> = ({ handleLogin }) => {
     <Fragment>
       <div className="login">
         <Card className="login__card">
-          <H5 className="login__header">Enter password</H5>
+          <H5 className="login__header">Password</H5>
           <form onSubmit={(e) => handleButtonClick(e)}>
             <InputGroup
               large

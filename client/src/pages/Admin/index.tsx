@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../utils/store/hooks';
 
 import './Admin.css';
 import { setToken } from '../../utils/store/slices/auth';
+import { Link } from 'react-router-dom';
 
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -60,7 +61,9 @@ export const Admin: React.FC = () => {
     <Fragment>
       <div className="wrapper">
         <div className="header">
-          <H3 className="header__text">Admin Panel</H3>
+          <H3 className="header__text">
+            <Link to="/">PEDIA</Link> Admin Panel
+          </H3>
         </div>
         {isLoading ? (
           <Spinner className="admin__spinner" />

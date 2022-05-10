@@ -403,7 +403,7 @@ export const ArticlePage: React.FC = () => {
               </div>
             )}
           </div>
-          <Footer />
+          <Footer title={getMenuTitle} />
           {imageView !== undefined && (
             <Dialog
               isOpen={imageView !== undefined}

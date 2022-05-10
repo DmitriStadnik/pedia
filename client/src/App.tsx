@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import store from './utils/store/store';
+import { ScrollToTop } from './components/ScrollToTop';
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           </Routes>
         </div>
       </BrowserRouter>
+      <ScrollToTop />
       <ToastContainer autoClose={1000} hideProgressBar pauseOnHover />
     </Provider>
   );

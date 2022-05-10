@@ -49,3 +49,17 @@ code {
   display: flex;
   justify-content: center;
 }
+
+a, a:hover {
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.8
+}
+
+.scroll_button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
