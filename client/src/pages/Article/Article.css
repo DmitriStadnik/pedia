@@ -20,6 +20,10 @@
   font-weight: 500;
 }
 
+.drawer__title.bp4-heading {
+  font-size: 16px;
+}
+
 .drawer__tree .bp4-tree-node-label {
   display: flex;
   height: 100%;

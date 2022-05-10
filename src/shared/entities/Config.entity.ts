@@ -10,4 +10,7 @@ export class Config {
 
   @Column()
   password: string;
+
+  @Column()
+  mainPageContent: string;
 }

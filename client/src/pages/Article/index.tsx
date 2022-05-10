@@ -19,6 +19,7 @@ import {
   Tree,
   TreeNodeInfo,
   Dialog,
+  Spinner,
 } from '@blueprintjs/core';
 import parse, {
   domToReact,
@@ -30,8 +31,8 @@ import { Article } from '../../utils/dto/article';
 import { Category } from '../../utils/dto/category';
 import { articleApi } from '../../utils/store/api/article';
 import { categoryApi } from '../../utils/store/api/category';
+import { configApi } from '../../utils/store/api/config';
 import { treeReducer, NodePath } from './drawerFunctions';
-import mainPage from './mainPageData';
 
 import './Article.css';
 
@@ -72,35 +73,61 @@ const createArticlesTree = (
 
   let index = 1;
 
-  const newTree = categories.map((category) => {
-    const categoryIndex = index;
+  const newTree = [...categories]
+    .sort((a, b) => {
+      if (a.title < b.title) {
+        return -1;
+      }
 
-    const children = articles
-      .filter((article) => article.category === category._id)
-      .map((article) => {
+      if (a.title > b.title) {
+        return 1;
+      }
+
+      return 0;
+    })
+    .map((category) => {
+      const categoryIndex = index;
+
+      const children = [...articles]
+        .filter((article) => article.category === category._id)
+        .sort((a, b) => {
+          if (a.isMainArticle) return -1;
+          if (b.isMainArticle) return 1;
+
+          if (a.title < b.title) {
+            return -1;
+          }
+
+          if (a.title > b.title) {
+            return 1;
+          }
+
+          return 0;
+        })
+        .map((article) => {
+          index += 1;
+
+          return {
+            id: index,
+            isSelected: selectedId === article._id,
+            label: (
+              <NavLink to={`/article/${article.slug}`}>{article.title}</NavLink>
+            ),
+          };
+        });
+
+      if (!children.length) {
         index += 1;
+      }
 
-        return {
-          id: index,
-          isSelected: selectedId === article._id,
-          label: (
-            <NavLink to={`/article/${article.slug}`}>{article.title}</NavLink>
-          ),
-        };
-      });
-
-    if (!children.length) {
-      index += 1;
-    }
-
-    return {
-      id: categoryIndex,
-      hasCaret: true,
-      label: category.title,
-      childNodes: children,
-      isExpanded: children.find((child) => child.isSelected) !== undefined,
-    };
-  });
+      return {
+        id: categoryIndex,
+        hasCaret: true,
+        label: category.title,
+        childNodes: children,
+        isExpanded: children.find((child) => child.isSelected) !== undefined,
+      };
+    });
 
   return [mainPageNode, ...newTree];
 };
@@ -186,12 +213,22 @@ export const ArticlePage: React.FC = () => {
     isLoading: categoriesLoading,
   } = categoryApi.useGetListQuery();
 
+  const {
+    data: config,
+    error: configError,
+    isLoading: configLoading,
+  } = configApi.useGetQuery();
+
   if (articlesError) {
     console.log(articlesError);
   }
 
   if (categoriesError) {
     console.log(categoriesError);
+  }
+
+  if (configError) {
+    console.log(configError);
   }
 
   const article = articles?.find((item) => item.slug === slug);
@@ -235,25 +272,45 @@ export const ArticlePage: React.FC = () => {
     []
   );
 
-  const getTitle = useMemo(() => {
-    if (articlesLoading) {
+  const isLoading = useMemo(() => {
+    return articlesLoading || configLoading || categoriesLoading;
+  }, [articlesLoading, configLoading, categoriesLoading]);
+
+  const getMenuTitle = useMemo(() => {
+    if (configLoading || !config) {
       return '';
     }
-    if (!article) {
-      return mainPage.title;
+
+    return config.title;
+  }, [config, configLoading]);
+
+  const getPageTitle = useMemo(() => {
+    if (configLoading || articlesLoading) {
+      return '';
     }
+
+    if (!article) {
+      const title = config ? config.title : '';
+
+      return title;
+    }
+
     return article.title;
-  }, [article, articlesLoading]);
+  }, [article, config, articlesLoading, configLoading]);
 
   const getContent = useMemo(() => {
-    if (articlesLoading) {
+    if (configLoading || articlesLoading) {
       return '';
     }
+
     if (!article) {
-      return renderArticle(mainPage.content, handleImageClick, articles || []);
+      const content = config ? config.mainPageContent : '';
+
+      return renderArticle(content, handleImageClick, articles || []);
     }
+
     return renderArticle(article.content, handleImageClick, articles || []);
-  }, [article, articlesLoading]);
+  }, [article, config, articlesLoading, configLoading]);
 
   const getLinks = useCallback(
     (linkedArticles: string[]) => {
@@ -293,68 +350,78 @@ export const ArticlePage: React.FC = () => {
 
   return (
     <Fragment>
-      <Drawer
-        className="drawer"
-        isOpen={drawerOpen}
-        onClose={handleDrawerToggle}
-        {...drawerProps}
-      >
-        <div className="drawer__header">
-          <Button
-            className="drawer__button button button_nobg"
-            onClick={handleDrawerToggle}
-            icon={<Icon icon="cross" size={IconSize.LARGE} intent="primary" />}
-            minimal
-          />
-          <H3 className="drawer__title">Говнолор</H3>
-        </div>
-        <div className="drawer__content">
-          {articlesLoading || categoriesLoading || (
-            <Tree
-              contents={articlesTree}
-              onNodeClick={handleNodeClick}
-              onNodeCollapse={handleNodeToggle}
-              onNodeExpand={handleNodeToggle}
-              className="drawer__tree"
-            />
-          )}
-        </div>
-      </Drawer>
-      <div className="wrapper wrapper_footer">
-        <div className="header">
-          <Button
-            className="header__button button button_nobg"
-            onClick={handleDrawerToggle}
-            icon={<Icon icon="menu" size={IconSize.LARGE} intent="primary" />}
-            minimal
-          />
-          <H3 className="header__text header__text_center">{getTitle}</H3>
-        </div>
-        <div className="article">{getContent}</div>
-        {!articlesLoading && article && article.linkedArticles.length > 0 && (
-          <div className="links">
-            <H5 className="article__header">Ссылки</H5>
-            {getLinks(article.linkedArticles)}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Fragment>
+          <Drawer
+            className="drawer"
+            isOpen={drawerOpen}
+            onClose={handleDrawerToggle}
+            {...drawerProps}
+          >
+            <div className="drawer__header">
+              <Button
+                className="drawer__button button button_nobg"
+                onClick={handleDrawerToggle}
+                icon={
+                  <Icon icon="cross" size={IconSize.LARGE} intent="primary" />
+                }
+                minimal
+              />
+              <H3 className="drawer__title">{getMenuTitle}</H3>
+            </div>
+            <div className="drawer__content">
+              <Tree
+                contents={articlesTree}
+                onNodeClick={handleNodeClick}
+                onNodeCollapse={handleNodeToggle}
+                onNodeExpand={handleNodeToggle}
+                className="drawer__tree"
+              />
+            </div>
+          </Drawer>
+          <div className="wrapper wrapper_footer">
+            <div className="header">
+              <Button
+                className="header__button button button_nobg"
+                onClick={handleDrawerToggle}
+                icon={
+                  <Icon icon="menu" size={IconSize.LARGE} intent="primary" />
+                }
+                minimal
+              />
+              <H3 className="header__text header__text_center">
+                {getPageTitle}
+              </H3>
+            </div>
+            <div className="article">{getContent}</div>
+            {article && article.linkedArticles.length > 0 && (
+              <div className="links">
+                <H5 className="article__header">Ссылки</H5>
+                {getLinks(article.linkedArticles)}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <Footer />
-      {imageView !== undefined && (
-        <Dialog
-          isOpen={imageView !== undefined}
-          canEscapeKeyClose
-          canOutsideClickClose
-          isCloseButtonShown
-          title={imageView?.title}
-          onClose={() => setImageView(undefined)}
-          className="modal"
-        >
-          <img
-            className="modal__img"
-            src={imageView?.src}
-            alt={imageView?.title}
-          />
-        </Dialog>
+          <Footer />
+          {imageView !== undefined && (
+            <Dialog
+              isOpen={imageView !== undefined}
+              canEscapeKeyClose
+              canOutsideClickClose
+              isCloseButtonShown
+              title={imageView?.title}
+              onClose={() => setImageView(undefined)}
+              className="modal"
+            >
+              <img
+                className="modal__img"
+                src={imageView?.src}
+                alt={imageView?.title}
+              />
+            </Dialog>
+          )}
+        </Fragment>
       )}
     </Fragment>
   );

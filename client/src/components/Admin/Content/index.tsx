@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { articleApi } from '../../../utils/store/api/article';
 import { categoryApi } from '../../../utils/store/api/category';
 import { AdminTable } from '../AdminTable';
+import { ConfigPage } from '../Config';
 import { EditArticle } from '../EditArticle';
 import { EditCategory } from '../EditCategory';
 import { articlesColumns, categoriesColumns } from './columns';
@@ -30,7 +31,7 @@ export const AdminContent: React.FC = () => {
   }
 
   if (categoriesError) {
-    console.log(articlesError);
+    console.log(categoriesError);
   }
 
   const [activeTab, setActiveTab] = useState<TabId>('articles');
@@ -89,6 +90,8 @@ export const AdminContent: React.FC = () => {
           }
         />
       )}
+
+      <Tab id="config" title="Config" panel={<ConfigPage />} />
     </Tabs>
   );
 };

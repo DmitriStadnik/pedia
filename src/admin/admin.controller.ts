@@ -1,7 +1,15 @@
-import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Get,
+  Body,
+  Put,
+} from '@nestjs/common';
+import { ConfigDTO } from 'src/shared/dto/config.dto';
+import { Config } from 'src/shared/entities/Config.entity';
 import { AdminService } from './admin.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Public } from './public.guard';
 
@@ -16,9 +24,14 @@ export class AdminController {
     return this.adminService.login();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Public()
   @Get('config')
-  getProfile(): any {
-    return this.adminService.getConfig();
+  async getConfig(): Promise<Partial<Config>> {
+    return await this.adminService.getConfig(false);
+  }
+
+  @Put('config')
+  updateConfig(@Body() body: Partial<ConfigDTO>): Promise<boolean> {
+    return this.adminService.updateConfig(body);
   }
 }

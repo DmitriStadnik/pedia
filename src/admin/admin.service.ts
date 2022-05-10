@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Config } from 'src/shared/entities/Config.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { ConfigDTO } from 'src/shared/dto/config.dto';
 
 @Injectable()
 export class AdminService {
@@ -13,14 +14,36 @@ export class AdminService {
     private configRepository: Repository<Config>,
   ) {}
 
-  async getConfig(): Promise<Config[]> {
-    return this.configRepository.find();
+  async getConfig(returnPass = true): Promise<Partial<Config>> {
+    const configArr = await this.configRepository.find();
+
+    if (!returnPass) {
+      const { password, ...rest } = configArr[0];
+
+      return rest;
+    }
+
+    return configArr[0];
   }
 
-  async validatePassword(pass: string): Promise<any> {
+  async updateConfig(body: Partial<ConfigDTO>): Promise<boolean> {
     const config = await this.getConfig();
 
-    return config && (await bcrypt.compare(pass, config[0].password));
+    // TODO update password with hash
+    // if (body.password && this.validatePassword(body.password)) {}
+
+    console.log(body);
+    const { affected } = await this.configRepository.update(config._id, {
+      ...body,
+    });
+
+    return affected === 1;
+  }
+
+  async validatePassword(pass: string): Promise<boolean> {
+    const config = await this.getConfig();
+
+    return config && (await bcrypt.compare(pass, config.password));
   }
 
   async login() {
