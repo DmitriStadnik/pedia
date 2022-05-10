@@ -348,6 +348,18 @@ export const ArticlePage: React.FC = () => {
     }
   }, [articlesLoading, categoriesLoading, articles, categories]);
 
+  useEffect(() => {
+    if (!article) {
+      if (!config) {
+        document.title = `404 - PEDIA`;
+      } else {
+        document.title = `${config.title} - PEDIA`;
+      }
+    } else {
+      document.title = `${article?.title} - PEDIA`;
+    }
+  }, [article, config]);
+
   return (
     <Fragment>
       {isLoading ? (
