@@ -32,7 +32,6 @@ export class AdminService {
     // TODO update password with hash
     // if (body.password && this.validatePassword(body.password)) {}
 
-    console.log(body);
     const { affected } = await this.configRepository.update(config._id, {
       ...body,
     });
