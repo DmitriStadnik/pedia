@@ -257,7 +257,12 @@ export const ArticlePage: React.FC = () => {
 
   const handleNodeClick = useCallback(
     (_node: TreeNodeInfo, nodePath: NodePath) => {
-      if (_node.hasCaret || _node.isSelected) {
+      if (_node.hasCaret) {
+        handleNodeToggle(_node, nodePath);
+        return;
+      }
+
+      if (_node.isSelected) {
         return;
       }
 
@@ -346,7 +351,7 @@ export const ArticlePage: React.FC = () => {
         },
       });
     }
-  }, [articlesLoading, categoriesLoading, articles, categories]);
+  }, [articlesLoading, categoriesLoading, articles, categories, slug]);
 
   useEffect(() => {
     if (!article) {
