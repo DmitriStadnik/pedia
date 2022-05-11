@@ -2,6 +2,10 @@
   padding: 20px;
 }
 
+.drawer__content {
+  overflow-y: auto;
+}
+
 .drawer__header {
   border-bottom: 2px solid #0b7fab;
   margin-bottom: 20px;
@@ -71,8 +75,8 @@
 
 .article__header {
   font-weight: 500;
-  margin-bottom: 10px;
   padding-bottom: 2px;
+  padding-top: 10px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
