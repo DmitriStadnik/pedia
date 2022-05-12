@@ -74,17 +74,17 @@ const createArticlesTree = (
   let index = 1;
 
   const newTree = [...categories]
-    .sort((a, b) => {
-      if (a.title < b.title) {
-        return -1;
-      }
+    // .sort((a, b) => {
+    //   if (a.title < b.title) {
+    //     return -1;
+    //   }
 
-      if (a.title > b.title) {
-        return 1;
-      }
+    //   if (a.title > b.title) {
+    //     return 1;
+    //   }
 
-      return 0;
-    })
+    //   return 0;
+    // })
     .map((category) => {
       const categoryIndex = index;
 
