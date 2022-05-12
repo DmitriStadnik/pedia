@@ -2,6 +2,27 @@
   padding: 20px;
 }
 
+.drawer .bp4-tree-node-content {
+  flex-direction: row-reverse;
+}
+
+.drawer .bp4-tree-node-caret {
+  transform: rotate(180deg);
+}
+
+.drawer .bp4-tree-node-caret.bp4-tree-node-caret-open {
+  transform: rotate(90deg);
+}
+
+.drawer .bp4-tree-node-content-1 {
+  padding-left: 20px;
+}
+
+.drawer .bp4-tree-node-content-0 {
+  padding-left: 10px;
+  cursor: pointer;
+}
+
 .drawer__content {
   overflow-y: auto;
 }
