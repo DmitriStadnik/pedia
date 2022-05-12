@@ -7,11 +7,11 @@
 }
 
 .drawer .bp4-tree-node-caret {
-  transform: rotate(180deg);
+  transform: rotate(90deg);
 }
 
 .drawer .bp4-tree-node-caret.bp4-tree-node-caret-open {
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 
 .drawer .bp4-tree-node-content-1 {
