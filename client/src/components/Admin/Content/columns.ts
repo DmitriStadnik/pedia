@@ -15,16 +15,12 @@ export const articlesColumns = [
     key: 'title',
   },
   {
-    title: 'Slug',
-    key: 'slug',
+    title: 'Category',
+    key: 'category',
   },
   {
     title: 'Is Main',
     key: 'isMainArticle',
-  },
-  {
-    title: 'Category',
-    key: 'category',
   },
   {
     title: 'Links',
