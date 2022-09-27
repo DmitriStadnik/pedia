@@ -24,10 +24,6 @@ export const AdminTable: React.FC<AdminTableProps> = ({
   content = null,
   editPath = null,
 }) => {
-  if (!content || !content.length) {
-    return <Fragment />;
-  }
-
   const navigate = useNavigate();
   const { data: categories } = categoryApi.useGetListQuery();
 
@@ -92,28 +88,30 @@ export const AdminTable: React.FC<AdminTableProps> = ({
           <Button minimal onClick={reloadFunc} icon="refresh" />
           <Button minimal onClick={handleAddClick} icon="plus" />
         </div>
-        <HTMLTable condensed striped interactive>
-          <thead>
-            <tr>
-              <th>#</th>
-              {columns.map((column) => (
-                <th key={column.key}>{column.title}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {content.map((item, index) => (
-              <tr onClick={() => handleRowClick(item._id)} key={item._id}>
-                <td>{index + 1}</td>
+        {content && content.length && (
+          <HTMLTable condensed striped interactive>
+            <thead>
+              <tr>
+                <th>#</th>
                 {columns.map((column) => (
-                  <td key={`${column.key}-${item[column.key]}`}>
-                    {renderCellContent(item[column.key], column.key)}
-                  </td>
+                  <th key={column.key}>{column.title}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </HTMLTable>
+            </thead>
+            <tbody>
+              {content.map((item, index) => (
+                <tr onClick={() => handleRowClick(item._id)} key={item._id}>
+                  <td>{index + 1}</td>
+                  {columns.map((column) => (
+                    <td key={`${column.key}-${item[column.key]}`}>
+                      {renderCellContent(item[column.key], column.key)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </HTMLTable>
+        )}
       </div>
     </Fragment>
   );
