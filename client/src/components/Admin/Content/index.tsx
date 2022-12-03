@@ -27,11 +27,11 @@ export const AdminContent: React.FC = () => {
   } = categoryApi.useGetListQuery();
 
   if (articlesError) {
-    console.log(articlesError);
+    console.error(articlesError);
   }
 
   if (categoriesError) {
-    console.log(categoriesError);
+    console.error(categoriesError);
   }
 
   const [activeTab, setActiveTab] = useState<TabId>('articles');

@@ -29,7 +29,7 @@
 
 .drawer__header {
   border-bottom: 2px solid #0b7fab;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   position: relative;
 }
 
@@ -37,6 +37,10 @@
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+.drawer__search {
+  margin-bottom: 20px;
 }
 
 .drawer__title {
