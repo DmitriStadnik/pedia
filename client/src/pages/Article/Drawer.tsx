@@ -108,7 +108,7 @@ export const ArticleDrawer: React.FC<ArticleDrawerProps> = ({
   );
 
   const searchSuggestions = useMemo(() => {
-    return miniSearch.search(searchValue, { fuzzy: 0.2 });
+    return miniSearch.search(searchValue, { fuzzy: 0.25, combineWith: 'AND' });
   }, [searchValue]);
 
   const getMenuTitle = useMemo(() => {
