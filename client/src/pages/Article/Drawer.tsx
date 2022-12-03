@@ -108,7 +108,10 @@ export const ArticleDrawer: React.FC<ArticleDrawerProps> = ({
   );
 
   const searchSuggestions = useMemo(() => {
-    return miniSearch.search(searchValue, { fuzzy: 0.25, combineWith: 'AND' });
+    return miniSearch.search(searchValue, {
+      fuzzy: 0.35,
+      combineWith: 'AND',
+    });
   }, [searchValue]);
 
   const getMenuTitle = useMemo(() => {
@@ -184,7 +187,11 @@ export const ArticleDrawer: React.FC<ArticleDrawerProps> = ({
           inputValueRenderer={renderSuggestValue}
           onItemSelect={handleSuggestItemSelect}
           onQueryChange={handleQueryChange}
-          popoverProps={{ matchTargetWidth: true, minimal: true }}
+          popoverProps={{
+            matchTargetWidth: true,
+            minimal: true,
+            className: 'drawer__search__popover',
+          }}
         />
       </div>
       <div className="drawer__content">
