@@ -1,9 +1,9 @@
-import { Entity, Column, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'Article' })
 export class Article {
-  @ObjectIdColumn()
-  _id: ObjectID;
+  @PrimaryGeneratedColumn('increment')
+  _id: string;
 
   @Column()
   title: string;
@@ -20,7 +20,7 @@ export class Article {
   @Column({ default: false })
   isMainArticle: boolean;
 
-  @Column()
+  @Column('text', { array: true })
   linkedArticles: string[];
 
   @Column()

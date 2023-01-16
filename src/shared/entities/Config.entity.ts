@@ -1,9 +1,9 @@
-import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'Config' })
 export class Config {
-  @ObjectIdColumn()
-  _id: ObjectID;
+  @PrimaryGeneratedColumn('increment')
+  _id: string;
 
   @Column()
   title: string;

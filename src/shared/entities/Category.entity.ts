@@ -1,9 +1,9 @@
-import { Entity, Column, ObjectIdColumn, ObjectID } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'Category' })
 export class Category {
-  @ObjectIdColumn()
-  _id: ObjectID;
+  @PrimaryGeneratedColumn('increment')
+  _id: string;
 
   @Column()
   title: string;

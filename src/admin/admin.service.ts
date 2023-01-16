@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Config } from 'src/shared/entities/Config.entity';
@@ -13,9 +13,20 @@ export class AdminService {
     @InjectRepository(Config)
     private configRepository: Repository<Config>,
   ) {}
+  async initialLaunch(): Promise<Partial<Config>> {
+    const config = new Config();
+
+    const { password, ...rest } = config;
+
+    return rest;
+  }
 
   async getConfig(returnPass = true): Promise<Partial<Config>> {
     const configArr = await this.configRepository.find();
+
+    if (!configArr) {
+      throw new NotFoundException();
+    }
 
     if (!returnPass) {
       const { password, ...rest } = configArr[0];

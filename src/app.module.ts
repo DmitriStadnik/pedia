@@ -24,10 +24,14 @@ import { Config } from './shared/entities/Config.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const url = configService.get<string>('MONGODB_URI');
+        const host = configService.get<string>('PG_HOST');
         return {
-          type: 'mongodb',
-          url: url,
+          type: 'postgres',
+          host: host,
+          port: 5432,
+          username: 'postgres',
+          password: 'postgres',
+          database: 'pedia',
           useNewUrlParser: true,
           logging: true,
           entities: [Article, Category, Config],
