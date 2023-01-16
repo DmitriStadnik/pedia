@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  pedia:
+    container_name: pedia
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - app
+      - app/node_modules
+    command: yarn start:prod
+    env_file:
+      - .env
+    networks:
+      - pedia-network
+    depends_on:
+      - database
+    links:
+      - database
+
+  database:
+    container_name: pedia-db
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/data/postgres
+    networks:
+      - pedia-network
+
+networks:
+  pedia-network:
+    driver: bridge
+
+volumes:
+  postgres:
