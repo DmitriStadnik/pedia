@@ -24,7 +24,6 @@ RUN addgroup -g 1000 node \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs; \
   else \
   echo "Building from source" \
-  # backup build
   && apk add --no-cache --virtual .build-deps-full \
   binutils-gold \
   g++ \
@@ -34,7 +33,6 @@ RUN addgroup -g 1000 node \
   linux-headers \
   make \
   python3 \
-  # gpg keys listed at https://github.com/nodejs/node#release-keys
   && for key in \
   4ED778F539E3634C779C87C6D7062848A1AB005C \
   141F07595B7B3FFE74309A937405533BE57C7D57 \
@@ -70,7 +68,6 @@ RUN addgroup -g 1000 node \
   fi \
   && rm -f "node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz" \
   && apk del .build-deps \
-  # smoke tests
   && node --version \
   && npm --version
 
@@ -92,7 +89,6 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
   && apk del .build-deps-yarn \
-  # smoke test
   && yarn --version
 
 WORKDIR /app

@@ -120,7 +120,7 @@ export const createArticlesTree = (
       const categoryIndex = index;
 
       const children = [...articles]
-        .filter((article) => article.category === category._id)
+        .filter((article) => `${article.category}` === `${category._id}`)
         .sort((a, b) => {
           if (a.isMainArticle) return -1;
           if (b.isMainArticle) return 1;

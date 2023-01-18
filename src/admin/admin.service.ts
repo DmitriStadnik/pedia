@@ -13,19 +13,24 @@ export class AdminService {
     @InjectRepository(Config)
     private configRepository: Repository<Config>,
   ) {}
+
   async initialLaunch(): Promise<Partial<Config>> {
     const config = new Config();
 
-    const { password, ...rest } = config;
+    config.mainPageContent = 'PEDIA starting page. Admin password is 123456';
+    config.password = await bcrypt.hash('123456', 10);
+    config.title = 'PEDIA Template';
 
-    return rest;
+    const newConfig = await this.configRepository.save(config);
+
+    return newConfig;
   }
 
   async getConfig(returnPass = true): Promise<Partial<Config>> {
     const configArr = await this.configRepository.find();
 
-    if (!configArr) {
-      throw new NotFoundException();
+    if (!configArr || configArr.length === 0) {
+      return await this.initialLaunch();
     }
 
     if (!returnPass) {

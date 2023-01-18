@@ -8,10 +8,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: yarn start:dev
+    # volumes:
+      # - ./src:/usr/app/
+      # - /usr/src/app/node_modules
+    command: yarn start:prod
     env_file:
       - .env
     networks:
